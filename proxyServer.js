@@ -14,6 +14,26 @@ dotenv.config();
 
 const API_KEY = process.env.API_KEY;
 
+app.post('/summonerInfo', async (req, res) => {
+	const summonerName = req.body.Username;
+	const summonerInfo = await getSummonerInfo(summonerName);
+	res.json(summonerInfo);
+});
+
+function getSummonerInfo(summonerName) {
+	return axios
+		.get(
+			'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' +
+				summonerName +
+				'?api_key=' +
+				API_KEY
+		)
+		.then((response) => {
+			return response.data;
+		})
+		.catch((error) => error);
+}
+
 function getPlayerPUUID(playerName) {
 	return axios
 		.get(
